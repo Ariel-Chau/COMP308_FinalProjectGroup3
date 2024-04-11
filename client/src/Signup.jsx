@@ -7,10 +7,11 @@ function Signup(){
     const [name, setName] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+    const [userType, setUserType] = useState("patient");
     const navigate = useNavigate();
     const handleSubmit = (e) =>{
         e.preventDefault();
-        axios.post('http://localhost:3001/register',{name,email,password})
+        axios.post('http://localhost:3001/register',{name,email,password,userType })
         .then(result => {console.log(result)
         navigate('/login')
         })
@@ -40,6 +41,18 @@ function Signup(){
                             <strong>Email</strong>
                         </label>
                         <input type="email" placeholder="Enter email" autoComplete="off" name="email" className="form-control rounded-0" onChange={(e) => setEmail(e.target.value)}/>
+                    </div>
+
+                    <div className="mb-3">
+                        <label><strong>User Type</strong></label><br />
+                        <div className="form-check form-check-inline">
+                            <input className="form-check-input" type="radio" name="userType" id="patientRadio" value="patient" checked={userType === "patient"} onChange={() => setUserType("patient")} />
+                            <label className="form-check-label" htmlFor="patientRadio">Patient</label>
+                        </div>
+                        <div className="form-check form-check-inline">
+                            <input className="form-check-input" type="radio" name="userType" id="nurseRadio" value="nurse" checked={userType === "nurse"} onChange={() => setUserType("nurse")} />
+                            <label className="form-check-label" htmlFor="nurseRadio">Nurse</label>
+                        </div>
                     </div>
 
 

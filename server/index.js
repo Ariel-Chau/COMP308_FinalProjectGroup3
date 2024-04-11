@@ -45,27 +45,29 @@ app.post("/login", (req,res) =>{
             bcyrpt.compare(password, user.password, (err, response)=>{
                 
                 if(response){
-                    const token = jwt.sign({email: user.email}, "jwt-secret-key", {expiresIn:"1d"})
+                    const token = jwt.sign({email: user.email}, "jwt-secret-key", {expiresIn:"1d"});
                     res.cookie("token", token);
-                    res.json("Success")
+                    res.json({ message: "Success", userType: user.userType }); // Send user type along with "Success" message
                 }
                 else{
-                    
-                    res.json("The password is incorrect")
-                    
+                    res.json("The password is incorrect");
                 }
             })
         }else{
-            res.json("No record existed")
+            res.json("No record existed");
         }
     })
-})
+    .catch(err => {
+        console.error("Login error:", err);
+        res.status(500).json("An error occurred during login.");
+    });
+});
 
 app.post('/register', (req,res) => {
-    const {name, email, password} = req.body;
+    const {name, email, password,userType } = req.body;
     bcyrpt.hash(password,10)
     .then(hash => {
-        UserModel.create({name, email, password: hash})
+        UserModel.create({name, email, password: hash,userType })
         .then(users => res.json(users))
         .catch(err => res.json(err)) 
     

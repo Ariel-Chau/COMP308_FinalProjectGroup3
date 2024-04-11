@@ -11,19 +11,27 @@ function Login(){
     const [password, setPassword] = useState();
     const navigate = useNavigate();
 
+    const [error, setError] = useState(""); // State to hold error message
+
     axios.defaults.withCredentials=true;
 
-    const handleSubmit = (e) =>{
+    const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:3001/login',{email,password})
-        .then(result => {console.log(result)
-            if(result.data === "Success"){
-                navigate('/home')
-            }
-        
-        })
-        .catch(err=> console.log(err))
-
+        axios.post('http://localhost:3001/login', { email, password })
+    .then(result => {
+        console.log(result);
+        if (result.data.message === "Success") {
+            // Save user type to state if needed
+            navigate('/home'); // Redirect to home page upon successful login
+        } else {
+            // Handle other cases like incorrect password or no record existed
+            console.log(result.data); // Log the error message from the backend
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        // Handle other errors such as network issues or server errors
+    });
     }
 
 
